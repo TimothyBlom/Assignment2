@@ -11,18 +11,10 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/customers")
-public class CustomerController {
-    private final CustomerRepository customerRepository = new CustomerRepository();
+public class SongsController {
 
-    @GetMapping
-    public ArrayList<Customer> getAllCustomers() {
-        return customerRepository.getAllCustomers();
-    }
-
-    @GetMapping("/{id}")
-    public Customer getCustomerById(@PathVariable String id) {
-        return customerRepository.getCustomerById(id);
-    }
-
+    @GetMapping("songList")
+    public String liistOfSongs() {
+        return "songList";
     }
 }
