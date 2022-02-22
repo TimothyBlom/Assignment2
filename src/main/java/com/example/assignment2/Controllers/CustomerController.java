@@ -23,4 +23,9 @@ public class CustomerController {
     public Customer getCustomerById(@PathVariable String id) {
         return customerRepository.getCustomerById(id);
     }
+
+    @GetMapping("songList")
+    public String liistOfSongs() {
+        return "songList";
+    }
 }
