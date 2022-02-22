@@ -1,6 +1,8 @@
 package com.example.assignment2.Controllers;
 
 import com.example.assignment2.DataAccess.Models.Customer;
+import com.example.assignment2.DataAccess.Models.CustomerCountry;
+import com.example.assignment2.DataAccess.Models.CustomerSpender;
 import com.example.assignment2.DataAccess.Repositories.CustomerRepository;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,5 +37,15 @@ public class CustomerController {
     public boolean updateExistingCustomer(@PathVariable String id, @RequestBody Customer customer) {
         customer.setCustomerId(id);
         return customerRepository.updateCustomer(customer);
+    }
+
+    @GetMapping("/countries")
+    public ArrayList<CustomerCountry> getCountriesByCustomerCount() {
+        return customerRepository.getCountriesByCustomerCount();
+    }
+
+    @GetMapping("/top-spenders")
+    public ArrayList<CustomerSpender> getCustomersByTotalSpending() {
+        return customerRepository.getCustomersByTotalSpending();
     }
 }

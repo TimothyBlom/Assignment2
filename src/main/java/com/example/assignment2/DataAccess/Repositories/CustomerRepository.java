@@ -2,6 +2,8 @@ package com.example.assignment2.DataAccess.Repositories;
 
 import com.example.assignment2.DataAccess.Database.ConnectionHelper;
 import com.example.assignment2.DataAccess.Models.Customer;
+import com.example.assignment2.DataAccess.Models.CustomerCountry;
+import com.example.assignment2.DataAccess.Models.CustomerSpender;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -189,5 +191,75 @@ public class CustomerRepository {
         }
 
         return successfullyUpdated;
+    }
+
+    public ArrayList<CustomerCountry> getCountriesByCustomerCount() {
+        ArrayList<CustomerCountry> countriesByCustomerCount = new ArrayList<>();
+        try {
+            conn = DriverManager.getConnection(URL);
+            String selectQuery = "SELECT Country, COUNT(*) AS CustomerCount FROM Customer";
+            selectQuery += " GROUP BY Country ORDER BY CustomerCount DESC";
+
+            PreparedStatement preparedStatement = conn.prepareStatement(selectQuery);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                countriesByCustomerCount.add(
+                        new CustomerCountry(
+                                resultSet.getString("Country"),
+                                resultSet.getString("CustomerCount")
+                        )
+                );
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            try {
+                conn.close();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                System.exit(-1);
+            }
+        }
+        return countriesByCustomerCount;
+    }
+
+    public ArrayList<CustomerSpender> getCustomersByTotalSpending() {
+        ArrayList<CustomerSpender> customersByTotalSpending = new ArrayList<>();
+        try {
+            conn = DriverManager.getConnection(URL);
+            String selectQuery = "SELECT C.CustomerId, C.FirstName, C.LastName, C.Country, C.PostalCode, C.Phone, C.Email, SUM(I.Total) AS TotalSpending";
+            selectQuery += " FROM Customer C INNER JOIN Invoice I ON I.CustomerId = C.CustomerId GROUP BY C.CustomerId ORDER BY TotalSpending DESC";
+
+            PreparedStatement preparedStatement = conn.prepareStatement(selectQuery);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                customersByTotalSpending.add(
+                        new CustomerSpender(
+                                resultSet.getString("CustomerId"),
+                                resultSet.getString("FirstName"),
+                                resultSet.getString("LastName"),
+                                resultSet.getString("Country"),
+                                resultSet.getString("PostalCode"),
+                                resultSet.getString("Phone"),
+                                resultSet.getString("Email"),
+                                resultSet.getString("TotalSpending")
+                        )
+                );
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            try {
+                conn.close();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                System.exit(-1);
+            }
+        }
+        return customersByTotalSpending;
     }
 }
