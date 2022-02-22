@@ -17,9 +17,9 @@ public class CustomerRepository {
         ArrayList<Customer> customers = new ArrayList<>();
         try {
             conn = DriverManager.getConnection(URL);
+            String selectQuery = "SELECT CustomerId, FirstName, LastName, Country, PostalCode, Phone, Email FROM Customer";
 
-            PreparedStatement preparedStatement =
-                    conn.prepareStatement("SELECT CustomerId, FirstName, LastName, Country, PostalCode, Phone, Email FROM Customer");
+            PreparedStatement preparedStatement = conn.prepareStatement(selectQuery);
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -54,9 +54,10 @@ public class CustomerRepository {
         Customer customer = null;
         try {
             conn = DriverManager.getConnection(URL);
+            String selectQuery = "SELECT CustomerId, FirstName, LastName, Country, PostalCode, Phone, Email FROM Customer";
+            selectQuery += " WHERE CustomerId = ?";
 
-            PreparedStatement preparedStatement =
-                    conn.prepareStatement("SELECT CustomerId, FirstName, LastName, Country, PostalCode, Phone, Email FROM Customer WHERE CustomerId = ?");
+            PreparedStatement preparedStatement = conn.prepareStatement(selectQuery);
             preparedStatement.setString(1, customerId);
 
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -74,6 +75,45 @@ public class CustomerRepository {
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+        finally {
+            try {
+                conn.close();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                System.exit(-1);
+            }
+        }
+        return customer;
+    }
+
+    public Customer getCustomerByName(String name) {
+        Customer customer = null;
+        try {
+            conn = DriverManager.getConnection(URL);
+            String selectQuery = "SELECT CustomerId, FirstName, LastName, Country, PostalCode, Phone, Email FROM Customer";
+            selectQuery += " WHERE FirstName LIKE ? OR LastName LIKE ?";
+
+            PreparedStatement preparedStatement = conn.prepareStatement(selectQuery);
+            preparedStatement.setString(1, "%" + name + "%");
+            preparedStatement.setString(2, "%" + name + "%");
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                customer = new Customer(
+                        resultSet.getString("CustomerId"),
+                        resultSet.getString("FirstName"),
+                        resultSet.getString("LastName"),
+                        resultSet.getString("Country"),
+                        resultSet.getString("PostalCode"),
+                        resultSet.getString("Phone"),
+                        resultSet.getString("Email")
+                );
+            }
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            System.exit(-1);
         }
         finally {
             try {
