@@ -125,4 +125,69 @@ public class CustomerRepository {
         }
         return customer;
     }
+
+    public boolean addCustomer(Customer customer) {
+        Boolean successfullyAdded = false;
+        try {
+            conn = DriverManager.getConnection(URL);
+            String createQuery = "INSERT INTO Customer (FirstName, LastName, Country, PostalCode, Phone, Email)";
+            createQuery += " VALUES (?, ?, ?, ?, ?, ?)";
+
+            PreparedStatement preparedStatement = conn.prepareStatement(createQuery);
+            preparedStatement.setString(1, customer.getFirstName());
+            preparedStatement.setString(2, customer.getLastName());
+            preparedStatement.setString(3, customer.getCountry());
+            preparedStatement.setString(4, customer.getPostalCode());
+            preparedStatement.setString(5, customer.getPhone());
+            preparedStatement.setString(6, customer.getEmail());
+
+            int result = preparedStatement.executeUpdate();
+            successfullyAdded = (result != 0);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            try {
+                conn.close();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                System.exit(-1);
+            }
+        }
+
+        return successfullyAdded;
+    }
+
+    public boolean updateCustomer(Customer customer) {
+        boolean successfullyUpdated = false;
+        try {
+            conn = DriverManager.getConnection(URL);
+            String updateQuery = "UPDATE Customer SET FirstName = ?, LastName = ?, Country = ?, PostalCode = ?, Phone = ?, Email = ?";
+            updateQuery += " WHERE CustomerId = ?";
+
+            PreparedStatement preparedStatement = conn.prepareStatement(updateQuery);
+            preparedStatement.setString(1, customer.getFirstName());
+            preparedStatement.setString(2, customer.getLastName());
+            preparedStatement.setString(3, customer.getCountry());
+            preparedStatement.setString(4, customer.getPostalCode());
+            preparedStatement.setString(5, customer.getPhone());
+            preparedStatement.setString(6, customer.getEmail());
+            preparedStatement.setString(7, customer.getCustomerId());
+
+            int result = preparedStatement.executeUpdate();
+            successfullyUpdated = (result != 0);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        finally {
+            try {
+                conn.close();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                System.exit(-1);
+            }
+        }
+
+        return successfullyUpdated;
+    }
 }

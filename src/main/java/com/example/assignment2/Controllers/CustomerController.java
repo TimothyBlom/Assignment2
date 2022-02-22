@@ -25,4 +25,15 @@ public class CustomerController {
     public Customer getCustomerByName(@RequestParam String name) {
         return customerRepository.getCustomerByName(name);
     }
+
+    @PostMapping
+    public boolean addNewCustomer(@RequestBody Customer customer) {
+        return customerRepository.addCustomer(customer);
+    }
+
+    @PutMapping("/{id}")
+    public boolean updateExistingCustomer(@PathVariable String id, @RequestBody Customer customer) {
+        customer.setCustomerId(id);
+        return customerRepository.updateCustomer(customer);
+    }
 }
