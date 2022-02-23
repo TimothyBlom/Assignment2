@@ -1,21 +1,21 @@
 package com.example.assignment2.DataAccess.Models;
 
 public class Song {
-    private String songName;
+    private String track;
 
     public Song() {
 
     }
 
-    public Song(String songName) {
-        this.songName = songName;
+    public Song(String track) {
+        this.track = track;
     }
 
-    public String GetSongName() {
-        return songName;
+    public String GetTrack() {
+        return track;
     }
 
-    public void SetSongName(String songName) {
-        this.songName = songName;
+    public void SetTrack(String track) {
+        this.track = track;
     }
 }

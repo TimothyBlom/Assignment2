@@ -30,7 +30,6 @@ Customer calls include:
 of the SQL keywords to get a subset of the customer data. The customer model from above should be reused.
 i.e. 10 customers starting at 50 (customers 50-60).
 
-
 Notes to self:
 Configure REST endpoints with Spring?
 

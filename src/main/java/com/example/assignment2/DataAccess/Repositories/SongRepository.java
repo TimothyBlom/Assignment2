@@ -13,20 +13,20 @@ public class SongRepository {
     private final String URL = ConnectionHelper.CONNECTION_URL;
     private Connection conn = null;
 
-    public ArrayList<Song> getRandomGenre() {
-        ArrayList<Song> Song = new ArrayList<>();
+    public ArrayList<Song> getAllTracks() {
+        ArrayList<Song> tracks = new ArrayList<>();
         try {
             conn = DriverManager.getConnection(URL);
 
             PreparedStatement preparedStatement =
-                    conn.prepareStatement("SELECT SongName FROM Song");
+                    conn.prepareStatement("SELECT Name FROM Song");
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                Song.add(
+                tracks.add(
                         new Song(
-                                resultSet.getString("SongName")
+                                resultSet.getString("Name")
                         )
                 );
             }
@@ -41,6 +41,6 @@ public class SongRepository {
                 System.out.println(e.getMessage());
             }
         }
-        return Song;
+        return tracks;
     }
 }
