@@ -13,7 +13,7 @@ public class SongRepository {
     private final String URL = ConnectionHelper.CONNECTION_URL;
     private Connection conn = null;
 
-    public ArrayList<Song> getAllTracks() {
+    public ArrayList<Song> getTracks() {
         ArrayList<Song> tracks = new ArrayList<>();
         try {
             conn = DriverManager.getConnection(URL);

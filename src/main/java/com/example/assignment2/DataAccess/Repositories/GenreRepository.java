@@ -13,20 +13,20 @@ public class GenreRepository {
     private final String URL = ConnectionHelper.CONNECTION_URL;
     private Connection conn = null;
 
-    public ArrayList<Genre> getRandomGenre() {
-        ArrayList<Genre> Genre = new ArrayList<>();
+    public ArrayList<Genre> getGenres() {
+        ArrayList<Genre> genres = new ArrayList<>();
         try {
             conn = DriverManager.getConnection(URL);
 
             PreparedStatement preparedStatement =
-                    conn.prepareStatement("SELECT GenreName FROM Genre");
+                    conn.prepareStatement("SELECT Name FROM Genre");
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                Genre.add(
+                genres.add(
                         new Genre(
-                                resultSet.getString("GenreName")
+                                resultSet.getString("Name")
                         )
                 );
             }
@@ -41,6 +41,6 @@ public class GenreRepository {
                 System.out.println(e.getMessage());
             }
         }
-        return Genre;
+        return genres;
     }
 }

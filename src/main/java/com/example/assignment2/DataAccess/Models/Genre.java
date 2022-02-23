@@ -1,21 +1,21 @@
 package com.example.assignment2.DataAccess.Models;
 
 public class Genre {
-    private String genreName;
+    private String Name;
 
     public Genre() {
 
     }
 
-    public Genre(String genreName) {
-        this.genreName = genreName;
+    public Genre(String Name) {
+        this.Name = Name;
     }
 
-    public String GetGenreName() {
-        return genreName;
+    public String GetName() {
+        return Name;
     }
 
-    public void SetGenreName(String genreName) {
-        this.genreName = genreName;
+    public void SetName(String Name) {
+        this.Name = Name;
     }
 }

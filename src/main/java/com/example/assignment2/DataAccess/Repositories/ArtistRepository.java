@@ -13,20 +13,20 @@ public class ArtistRepository {
     private final String URL = ConnectionHelper.CONNECTION_URL;
     private Connection conn = null;
 
-    public ArrayList<Artist> getArtist() {
-        ArrayList<Artist> Artist = new ArrayList<>();
+    public ArrayList<Artist> getArtists() {
+        ArrayList<Artist> artists = new ArrayList<>();
         try {
             conn = DriverManager.getConnection(URL);
 
             PreparedStatement preparedStatement =
-                    conn.prepareStatement("SELECT ArtistName FROM Artist");
+                    conn.prepareStatement("SELECT Name FROM Artist");
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                Artist.add(
+                artists.add(
                         new Artist(
-                                resultSet.getString("ArtistName")
+                                resultSet.getString("Name")
                         )
                 );
             }
@@ -41,6 +41,6 @@ public class ArtistRepository {
                 System.out.println(e.getMessage());
             }
         }
-        return Artist;
+        return artists;
     }
 }
