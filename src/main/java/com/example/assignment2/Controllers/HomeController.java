@@ -1,7 +1,11 @@
 package com.example.assignment2.Controllers;
 
-import com.example.assignment2.DataAccess.Models.Song;
-import com.example.assignment2.DataAccess.Repositories.SongRepository;
+import com.example.assignment2.DataAccess.Models.Artist;
+import com.example.assignment2.DataAccess.Models.Genre;
+import com.example.assignment2.DataAccess.Models.Track;
+import com.example.assignment2.DataAccess.Repositories.ArtistRepository;
+import com.example.assignment2.DataAccess.Repositories.GenreRepository;
+import com.example.assignment2.DataAccess.Repositories.TrackRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
@@ -9,18 +13,29 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 
-//@RestController
 @Controller
+@RestController
 @RequestMapping("/songs")
 public class HomeController {
-    private final SongRepository SongRepository = new SongRepository();
+    private final TrackRepository trackRepository = new TrackRepository();
+    private final ArtistRepository artistRepository = new ArtistRepository();
+    private final GenreRepository genreRepository = new GenreRepository();
 
-    @GetMapping
-    public ArrayList<Song> getTracks() {
-        return SongRepository.getTracks();
+    @GetMapping("/tracks")
+    public ArrayList<Track> getTracks() {
+        return trackRepository.getTracks();
     }
 
-//Only works with @Controller
+    @GetMapping("/artists")
+    public ArrayList<Artist> getArtist() {
+        return artistRepository.getArtists();
+    }
+
+    @GetMapping("/genres")
+    public ArrayList<Genre> getGenres() {
+        return genreRepository.getGenres();
+    }
+
     @GetMapping("/home")
     public String homePageView() {
         return "Home";

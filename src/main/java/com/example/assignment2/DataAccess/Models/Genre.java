@@ -11,11 +11,11 @@ public class Genre {
         this.Name = Name;
     }
 
-    public String GetName() {
+    public String getName() {
         return Name;
     }
 
-    public void SetName(String Name) {
+    public void setName(String Name) {
         this.Name = Name;
     }
 }

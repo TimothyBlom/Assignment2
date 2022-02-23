@@ -1,9 +1,6 @@
 package com.example.assignment2.Controllers;
 
-import com.example.assignment2.DataAccess.Models.Customer;
-import com.example.assignment2.DataAccess.Models.CustomerCountry;
-import com.example.assignment2.DataAccess.Models.CustomerGenre;
-import com.example.assignment2.DataAccess.Models.CustomerSpender;
+import com.example.assignment2.DataAccess.Models.*;
 import com.example.assignment2.DataAccess.Repositories.CustomerRepository;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,7 +1,7 @@
 package com.example.assignment2.DataAccess.Repositories;
 
 import com.example.assignment2.DataAccess.Database.ConnectionHelper;
-import com.example.assignment2.DataAccess.Models.Song;
+import com.example.assignment2.DataAccess.Models.Track;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,23 +9,23 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-public class SongRepository {
+public class TrackRepository {
     private final String URL = ConnectionHelper.CONNECTION_URL;
     private Connection conn = null;
 
-    public ArrayList<Song> getTracks() {
-        ArrayList<Song> tracks = new ArrayList<>();
+    public ArrayList<Track> getTracks() {
+        ArrayList<Track> tracks = new ArrayList<>();
         try {
             conn = DriverManager.getConnection(URL);
 
             PreparedStatement preparedStatement =
-                    conn.prepareStatement("SELECT Name FROM Song");
+                    conn.prepareStatement("SELECT Name FROM Track");
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 tracks.add(
-                        new Song(
+                        new Track(
                                 resultSet.getString("Name")
                         )
                 );
