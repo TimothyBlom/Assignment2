@@ -12,9 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 @Controller
-@RestController
+//@RestController
 @RequestMapping("/songs")
 public class HomeController {
     private final TrackRepository trackRepository = new TrackRepository();
@@ -28,6 +29,7 @@ public class HomeController {
 
     @GetMapping("/artists")
     public ArrayList<Artist> getArtist() {
+        Collections.shuffle(artistRepository.getArtists());
         return artistRepository.getArtists();
     }
 
