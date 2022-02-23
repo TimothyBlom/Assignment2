@@ -2,16 +2,29 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
     <meta charset="UTF-8" />
-    <title></title>
+    <title>Home page</title>
 </head>
 <body>
-    <p>This is the home page</p>
-    <form method="post" action="/songs">
-        <input type="text" name="name" />
-        <input type="submit" value="greetings" />
+    <h1>Home page</h1>
+    <form method="get" th:action="@{/search}">
+        <label for="search">Search for tracks:</label>
+        <input type="search" id="search" name="query" required />
+        <input type="submit" value="search" />
     </form>
-    <ul>
-        <li>Here come 5 random artists, songs or genres</li>
+
+    <h2>Random artists</h2>
+    <ul th:each="randomArtist: ${randomArtists}">
+        <li th:text="${randomArtist.getName()}"></li>
+    </ul>
+
+    <h2>Random tracks</h2>
+    <ul th:each="randomTrack: ${randomTracks}">
+        <li th:text="${randomTrack.getName()}"></li>
+    </ul>
+
+    <h2>Random genres</h2>
+    <ul th:each="randomGenre: ${randomGenres}">
+        <li th:text="${randomGenre.getName()}"></li>
     </ul>
 </body>
 </html>

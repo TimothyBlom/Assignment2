@@ -2,9 +2,37 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org/">
 <head>
     <meta charset="UTF-8" />
-    <title></title>
+    <title>Search results</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: solid;
+        }
+    </style>
 </head>
 <body>
-    <p>This is the search results</p>
+    <h1>Search results</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Track</th>
+                <th>Artist</th>
+                <th>Album</th>
+                <th>Genre</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="searchResult: ${searchResults}">
+                <td th:text="${searchResult.getTrack()}"></td>
+                <td th:text="${searchResult.getArtist()}"></td>
+                <td th:text="${searchResult.getAlbum()}"></td>
+                <td th:text="${searchResult.getGenre()}"></td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>
