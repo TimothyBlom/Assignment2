@@ -2,6 +2,7 @@ package com.example.assignment2.Controllers;
 
 import com.example.assignment2.DataAccess.Models.Customer;
 import com.example.assignment2.DataAccess.Models.CustomerCountry;
+import com.example.assignment2.DataAccess.Models.CustomerGenre;
 import com.example.assignment2.DataAccess.Models.CustomerSpender;
 import com.example.assignment2.DataAccess.Repositories.CustomerRepository;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,11 @@ public class CustomerController {
         return customerRepository.getCustomerByName(name);
     }
 
+    @GetMapping("/page")
+    public ArrayList<Customer> getPageOfCustomers(@RequestParam String limit, @RequestParam String offset) {
+        return customerRepository.getPageOfCustomers(limit, offset);
+    }
+
     @PostMapping
     public boolean addNewCustomer(@RequestBody Customer customer) {
         return customerRepository.addCustomer(customer);
@@ -44,8 +50,13 @@ public class CustomerController {
         return customerRepository.getCountriesByCustomerCount();
     }
 
-    @GetMapping("/top-spenders")
+    @GetMapping("/top/spenders")
     public ArrayList<CustomerSpender> getCustomersByTotalSpending() {
         return customerRepository.getCustomersByTotalSpending();
+    }
+
+    @GetMapping("/{id}/popular/genre")
+    public ArrayList<CustomerGenre> getMostPopularGenresPerCustomer(@PathVariable String id) {
+        return customerRepository.getMostPopularGenresPerCustomer(id);
     }
 }

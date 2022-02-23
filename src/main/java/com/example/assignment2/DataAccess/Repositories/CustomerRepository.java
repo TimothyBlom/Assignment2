@@ -3,6 +3,7 @@ package com.example.assignment2.DataAccess.Repositories;
 import com.example.assignment2.DataAccess.Database.ConnectionHelper;
 import com.example.assignment2.DataAccess.Models.Customer;
 import com.example.assignment2.DataAccess.Models.CustomerCountry;
+import com.example.assignment2.DataAccess.Models.CustomerGenre;
 import com.example.assignment2.DataAccess.Models.CustomerSpender;
 
 import java.sql.Connection;
@@ -22,7 +23,6 @@ public class CustomerRepository {
             String selectQuery = "SELECT CustomerId, FirstName, LastName, Country, PostalCode, Phone, Email FROM Customer";
 
             PreparedStatement preparedStatement = conn.prepareStatement(selectQuery);
-
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -38,15 +38,14 @@ public class CustomerRepository {
                         )
                 );
             }
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            System.exit(-1);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         finally {
             try {
                 conn.close();
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
         }
         return customers;
@@ -76,14 +75,13 @@ public class CustomerRepository {
                 );
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         finally {
             try {
                 conn.close();
-            } catch (Exception exception) {
-                exception.printStackTrace();
-                System.exit(-1);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         return customer;
@@ -99,7 +97,6 @@ public class CustomerRepository {
             PreparedStatement preparedStatement = conn.prepareStatement(selectQuery);
             preparedStatement.setString(1, "%" + name + "%");
             preparedStatement.setString(2, "%" + name + "%");
-
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -128,6 +125,44 @@ public class CustomerRepository {
         return customer;
     }
 
+    public ArrayList<Customer> getPageOfCustomers(String limit, String offset) {
+        ArrayList<Customer> customers = new ArrayList<>();
+        try {
+            conn = DriverManager.getConnection(URL);
+            String selectQuery = "SELECT CustomerId, FirstName, LastName, Country, PostalCode, Phone, Email FROM Customer";
+            selectQuery += " LIMIT ? OFFSET ?";
+
+            PreparedStatement preparedStatement = conn.prepareStatement(selectQuery);
+            preparedStatement.setString(1, limit);
+            preparedStatement.setString(2, offset);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                customers.add(
+                        new Customer(
+                                resultSet.getString("CustomerId"),
+                                resultSet.getString("FirstName"),
+                                resultSet.getString("LastName"),
+                                resultSet.getString("Country"),
+                                resultSet.getString("PostalCode"),
+                                resultSet.getString("Phone"),
+                                resultSet.getString("Email")
+                        )
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return customers;
+    }
+
     public boolean addCustomer(Customer customer) {
         Boolean successfullyAdded = false;
         try {
@@ -146,14 +181,13 @@ public class CustomerRepository {
             int result = preparedStatement.executeUpdate();
             successfullyAdded = (result != 0);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         finally {
             try {
                 conn.close();
-            } catch (Exception exception) {
-                exception.printStackTrace();
-                System.exit(-1);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
@@ -179,14 +213,13 @@ public class CustomerRepository {
             int result = preparedStatement.executeUpdate();
             successfullyUpdated = (result != 0);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         finally {
             try {
                 conn.close();
-            } catch (Exception exception) {
-                exception.printStackTrace();
-                System.exit(-1);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
@@ -212,14 +245,13 @@ public class CustomerRepository {
                 );
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         finally {
             try {
                 conn.close();
-            } catch (Exception exception) {
-                exception.printStackTrace();
-                System.exit(-1);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         return countriesByCustomerCount;
@@ -250,16 +282,53 @@ public class CustomerRepository {
                 );
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         finally {
             try {
                 conn.close();
-            } catch (Exception exception) {
-                exception.printStackTrace();
-                System.exit(-1);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         return customersByTotalSpending;
+    }
+
+    public ArrayList<CustomerGenre> getMostPopularGenresPerCustomer(String customerId) {
+        ArrayList<CustomerGenre> mostPopularGenres = new ArrayList<>();
+
+        try {
+            conn = DriverManager.getConnection(URL);
+            String selectQuery = "WITH PopularGenre AS (SELECT C.CustomerId, C.FirstName, C.LastName, G.Name, COUNT(Il.Quantity) as TotalScore";
+            selectQuery += " FROM Customer C INNER JOIN Invoice I ON I.CustomerId = C.CustomerId INNER JOIN InvoiceLine Il ON I.InvoiceId = Il.InvoiceId";
+            selectQuery += " INNER JOIN Track T ON T.TrackId = Il.TrackId INNER JOIN Genre G ON T.GenreId = G.GenreId  WHERE C.CustomerId = ? GROUP BY G.Name)";
+            selectQuery += " SELECT PG.CustomerId, PG.FirstName, PG.LastName, PG.Name, TotalScore FROM PopularGenre  PG";
+            selectQuery += " GROUP BY PG.Name HAVING TotalScore = (SELECT MAX(TotalScore) FROM PopularGenre);";
+
+            PreparedStatement preparedStatement = conn.prepareStatement(selectQuery);
+            preparedStatement.setString(1, customerId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                mostPopularGenres.add(
+                        new CustomerGenre(
+                                resultSet.getString("CustomerId"),
+                                resultSet.getString("FirstName"),
+                                resultSet.getString("LastName"),
+                                resultSet.getString("Name")
+                        )
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return mostPopularGenres;
     }
 }
