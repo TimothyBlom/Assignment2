@@ -11,11 +11,11 @@ public class Artist {
         this.Name = Name;
     }
 
-    public String getArtist() {
+    public String getName() {
         return Name;
     }
 
-    public void setArtist(String Name) {
+    public void setName(String Name) {
         this.Name = Name;
     }
 }
