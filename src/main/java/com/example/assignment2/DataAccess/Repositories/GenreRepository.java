@@ -13,34 +13,33 @@ public class GenreRepository {
     private final String URL = ConnectionHelper.CONNECTION_URL;
     private Connection conn = null;
 
-    public ArrayList<Genre> getGenres() {
-        ArrayList<Genre> genres = new ArrayList<>();
+    public ArrayList<Genre> getRandomGenres(int genreCount) {
+        ArrayList<Genre> randomGenres = new ArrayList<>();
         try {
             conn = DriverManager.getConnection(URL);
+            String selectQuery = "SELECT Name FROM Genre ORDER BY random() LIMIT ?";
 
-            PreparedStatement preparedStatement =
-                    conn.prepareStatement("SELECT Name FROM Genre");
-
+            PreparedStatement preparedStatement = conn.prepareStatement(selectQuery);
+            preparedStatement.setInt(1, genreCount);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                genres.add(
+                randomGenres.add(
                         new Genre(
                                 resultSet.getString("Name")
                         )
                 );
             }
-        } catch (Exception exception) {
-            exception.printStackTrace();
-            System.exit(-1);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         finally {
             try {
                 conn.close();
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
         }
-        return genres;
+        return randomGenres;
     }
 }
