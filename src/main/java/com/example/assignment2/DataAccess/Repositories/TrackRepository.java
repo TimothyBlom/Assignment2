@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+//Collects random song names from the SQLite database
 public class TrackRepository {
     private final String URL = ConnectionHelper.CONNECTION_URL;
     private Connection conn = null;

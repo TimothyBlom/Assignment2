@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+//Collects all customers and their information from the SQLite database
 public class CustomerRepository {
     private final String URL = ConnectionHelper.CONNECTION_URL;
     private Connection conn = null;

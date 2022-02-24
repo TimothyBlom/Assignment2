@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+//Collects random genre names from the SQLite database
 public class GenreRepository {
     private final String URL = ConnectionHelper.CONNECTION_URL;
     private Connection conn = null;
